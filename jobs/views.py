@@ -1,6 +1,4 @@
-# from django.shortcuts import render
-# from django.views.generic import TemplateView
-from django.shortcuts import get_object_or_404, get_list_or_404
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
 
@@ -17,7 +15,7 @@ class JobPostDetailView(DetailView):
     def get_object(self):
         # Call the superclass
         object = super(JobPostDetailView, self).get_object()
-        # Record the last accessed date
+        # Increment and save the number of views
         object.times_viewed += 1
         object.save()
         # Return the object
@@ -68,7 +66,3 @@ class JobByPlaceListView(ListView):
         context = super(JobByPlaceListView, self).get_context_data(**kwargs)
         context['titlepage'] = "to work in %s" % self.place
         return context
-
-
-# class PostNewView(TemplateView):
-#     template_name = "post_new.html"
