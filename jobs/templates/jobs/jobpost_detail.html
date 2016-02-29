@@ -6,12 +6,12 @@
     <h2>{{ job_post.title }}</h2>
 
     <h3>
-        <a href="/category/{{ job_post.category.slug }}">
+        <a href="{% url 'jobs-by-category' slug=job_post.category.slug %}">
         {{ job_post.category }}
         </a>
     </h3>
     <h3>
-        <a href="/place/{{ job_post.place.id }}">
+        <a href="{% url 'jobs-by-place' job_post.place.id %}">
         {{ job_post.place }}
         </a>
     </h3>

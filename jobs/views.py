@@ -1,10 +1,13 @@
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.core.urlresolvers import reverse_lazy
 
 from cities_light.models import City
 
 from .models import JobPost, Category
+from .forms import JobForm
 
 
 class JobPostDetailView(DetailView):
@@ -20,6 +23,7 @@ class JobPostDetailView(DetailView):
         object.save()
         # Return the object
         return object
+
 
 class PublishedListView(ListView):
     model = JobPost
@@ -66,3 +70,19 @@ class JobByPlaceListView(ListView):
         context = super(JobByPlaceListView, self).get_context_data(**kwargs)
         context['titlepage'] = "to work in %s" % self.place
         return context
+
+
+class JobCreate(CreateView):
+    form_class = JobForm
+    template_name = 'jobpost_form.html'
+
+
+class JobUpdate(UpdateView):
+    model = JobPost
+    form_class = JobForm
+    template_name = 'jobpost_form.html'
+
+
+class JobDelete(DeleteView):
+    model = JobPost
+    success_url = reverse_lazy('jobs-published')

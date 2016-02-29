@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 from cities_light.models import City
 
 
@@ -32,3 +33,6 @@ class JobPost(models.Model):
 
     def __str__(self):
         return "%s @ %s" % (self.title, self.place)
+
+    def get_absolute_url(self):
+        return reverse('job-detail', kwargs={'slug': self.slug})

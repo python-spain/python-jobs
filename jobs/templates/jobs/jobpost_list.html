@@ -4,7 +4,7 @@
     <h2>Job Posts {{ titlepage }}</h2>
     <ul>
         {% for job_post in object_list %}
-        <li><a href="/{{job_post.slug}}"> {{ job_post.title }} </a></li>
+        <li><a href="{% url 'job-detail' slug=job_post.slug %}"> {{ job_post.title }} </a></li>
         {% endfor %}
     </ul>
 {% endblock %}

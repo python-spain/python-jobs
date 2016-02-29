@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cities_light',
     'jobs',
+    'crispy_forms'
 ]
 
 MIDDLEWARE_CLASSES = [
