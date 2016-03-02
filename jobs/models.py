@@ -14,8 +14,9 @@ class Category(models.Model):
         return self.name
 
 
-class JobPost(models.Model):
+class Job(models.Model):
     title = models.CharField(max_length=255)
+    company = models.CharField(max_length=255)
     created_at = models.DateField(auto_now_add=True, editable=False)
     published_at = models.DateField(null=True, blank=True, default=None)
     slug = models.SlugField(max_length=255, blank=True, default='')
@@ -26,9 +27,9 @@ class JobPost(models.Model):
     contact_person = models.CharField(max_length=255)
     web_page = models.URLField(max_length=255, blank=True, default='')
     times_viewed = models.IntegerField(default=0)
-    category = models.ForeignKey(Category, related_name='job_posts')
+    category = models.ForeignKey(Category, related_name='jobs')
     place = models.ForeignKey(
-        City, related_name='job_posts', blank=True, null=True
+        City, related_name='jobs', blank=True, null=True
     )
 
     def __str__(self):

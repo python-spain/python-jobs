@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h4>{{ job.published_at }}</h4>
+
+    <h2>{{ job.title }}</h2>
+
+    <h3>
+        <a href="{% url 'jobs-by-category' slug=job.category.slug %}">
+        {{ job.category }}
+        </a>
+    </h3>
+    <h3>
+        <a href="{% url 'jobs-by-place' job.place.id %}">
+        {{ job.place }}
+        </a>
+    </h3>
+
+
+    <h5>Description</h5>
+    {{ job.description }}
+
+    <h5>Requirements</h5>
+    {{ job.requirements }}
+
+    <h5>About the company</h5>
+    {{ job.about_the_company }}
+
+    <h5>Contact</h5>
+    {{ job.contact_person }}
+    <a href="mailto:{{  job.contact_email }}">
+    {{ job.contact_email }}
+    </a>
+
+    {% if job.web_page %}
+      <h5>More info at</h5>
+      {{ job.web_page }}
+    {% endif %}
+
+    <h6>Viewed {{ job.times_viewed }} times</h6>
+{% endblock %}

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from .models import Category, JobPost
+from .models import Category, Job
 
 
 admin.site.register(Category)
-admin.site.register(JobPost)
+admin.site.register(Job)

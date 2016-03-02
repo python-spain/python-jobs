@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from .views import (
-    PublishedListView, JobPostDetailView,
+    PublishedListView, JobDetailView,
     JobByCategoryListView, JobByPlaceListView,
     JobCreate, JobUpdate, JobDelete
 )
@@ -21,7 +21,7 @@ urlpatterns = [
     ),
     url(
         r'^(?P<slug>[-\w]+)/$',
-        JobPostDetailView.as_view(), name='job-detail'
+        JobDetailView.as_view(), name='job-detail'
     ),
     url(
         r'job/add/$', JobCreate.as_view(), name='job-create'

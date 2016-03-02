@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import JobPost
+from .models import Job
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
@@ -16,6 +16,6 @@ class JobForm(ModelForm):
         self.helper.layout.append(Submit('save', 'save'))
 
     class Meta:
-        model = JobPost
+        model = Job
         fields = '__all__'
         exclude = ['created_at', 'published_at', 'times_viewed']
