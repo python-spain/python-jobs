@@ -1,9 +1,9 @@
 from django.conf.urls import url
 
 from .views import (
-    PublishedListView, JobDetailView,
+    PublishedListView, JobDetailView, JobPublishView,
     JobByCategoryListView, JobByPlaceListView,
-    JobCreate, JobUpdate, JobDelete
+    JobCreateView, JobUpdateView, JobDeleteView
 )
 
 urlpatterns = [
@@ -24,12 +24,15 @@ urlpatterns = [
         JobDetailView.as_view(), name='job-detail'
     ),
     url(
-        r'job/add/$', JobCreate.as_view(), name='job-create'
+        r'job/add/$', JobCreateView.as_view(), name='job-create'
     ),
     url(
-        r'job/edit/(?P<slug>[-\w]+)/$', JobUpdate.as_view(), name='job-update'
+        r'job/publish/(?P<slug>[-\w]+)/$', JobPublishView.as_view(), name='job-publish'
     ),
     url(
-        r'job/delete/(?P<slug>[-\w]+)/$', JobDelete.as_view(), name='job-delete'
+        r'job/edit/(?P<slug>[-\w]+)/$', JobUpdateView.as_view(), name='job-update'
+    ),
+    url(
+        r'job/delete/(?P<slug>[-\w]+)/$', JobDeleteView.as_view(), name='job-delete'
     ),
 ]

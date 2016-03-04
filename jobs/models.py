@@ -4,8 +4,8 @@ from cities_light.models import City
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, blank=True, default='')
+    name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, default='')
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -19,7 +19,9 @@ class Job(models.Model):
     company = models.CharField(max_length=255)
     created_at = models.DateField(auto_now_add=True, editable=False)
     published_at = models.DateField(null=True, blank=True, default=None)
-    slug = models.SlugField(max_length=255, blank=True, default='')
+    slug = models.SlugField(
+        max_length=255, unique=True, blank=True, default=''
+    )
     description = models.TextField()
     requirements = models.TextField()
     about_the_company = models.TextField()

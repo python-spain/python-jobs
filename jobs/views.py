@@ -1,13 +1,16 @@
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.core.urlresolvers import reverse_lazy
+
+from datetime import date
 
 from cities_light.models import City
 
-from .models import Job, Category
 from .forms import JobForm
+from .models import Job, Category
 
 
 class JobDetailView(DetailView):
@@ -58,6 +61,22 @@ class JobByCategoryListView(ListView):
         return context
 
 
+class JobPublishView(UserPassesTestMixin, UpdateView):
+    model = Job
+    form_class = JobForm
+    template_name = 'job_form.html'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def post(self, request, *args, **kwargs):
+        response = super(JobPublishView, self).post(request, *args, **kwargs)
+        job = Job.objects.get(**kwargs)
+        job.published_at = date.today()
+        job.save()
+        return response
+
+
 class JobByPlaceListView(ListView):
     def get_queryset(self):
         self.place = get_object_or_404(City, pk=self.args[0])
@@ -72,17 +91,17 @@ class JobByPlaceListView(ListView):
         return context
 
 
-class JobCreate(CreateView):
+class JobCreateView(CreateView):
     form_class = JobForm
-    template_name = 'jobpost_form.html'
+    template_name = 'job_form.html'
 
 
-class JobUpdate(UpdateView):
+class JobUpdateView(UpdateView):
     model = Job
     form_class = JobForm
-    template_name = 'jobpost_form.html'
+    template_name = 'job_form.html'
 
 
-class JobDelete(DeleteView):
+class JobDeleteView(DeleteView):
     model = Job
     success_url = reverse_lazy('jobs-published')
