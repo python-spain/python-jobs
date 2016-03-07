@@ -1,3 +1,4 @@
+from django.contrib.syndication.views import Feed
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponse
@@ -22,6 +23,7 @@ class JobDetailView(DetailView):
         # Call the superclass
         object = super(JobDetailView, self).get_object()
         # Increment and save the number of views
+        object.last_viewed_at = date.today()
         object.times_viewed += 1
         object.save()
         # Return the object
@@ -45,6 +47,63 @@ class PublishedListView(ListView):
         context = super(PublishedListView, self).get_context_data(**kwargs)
         context['titlepage'] = "Published"
         return context
+
+
+class PublishedJobsFeed(Feed):
+    title = "Python Spain Jobs Feed"
+    link = "/published/"
+    description = "Updates on changes and additions to Python Spain Jobs."
+
+    def items(self):
+        return Job.objects.order_by('-published_at')[:20]
+
+    def item_title(self, item):
+        return "%s (%s)" % (item.title, item.company)
+
+    def item_description(self, item):
+        return item.description
+
+
+class CategoryFeed(Feed):
+
+    def get_object(self, request, slug):
+        return Category.objects.get(slug=slug)
+
+    def title(self, obj):
+        return "Jobs for category: %s" % obj.name
+
+    def link(self, obj):
+        return obj.get_absolute_url()
+
+    def description(self, obj):
+        return "Jobs recently posted in category: %s" % obj.name
+
+    def items(self, obj):
+        return Job.objects.filter(
+            category=obj,
+            published_at__isnull=False
+        ).order_by('-published_at')[:10]
+
+
+class PlaceFeed(Feed):
+
+    def get_object(self, request, place_id):
+        return City.objects.get(pk=place_id)
+
+    def title(self, obj):
+        return "Jobs for city: %s" % obj.name
+
+    def link(self, obj):
+        return reverse_lazy('jobs-by-place', args=[obj.pk])
+
+    def description(self, obj):
+        return "Jobs recently posted in city: %s" % obj.name
+
+    def items(self, obj):
+        return Job.objects.filter(
+            place=obj,
+            published_at__isnull=False
+        ).order_by('-published_at')[:10]
 
 
 class JobByCategoryListView(ListView):
