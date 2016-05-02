@@ -121,6 +121,25 @@ USE_TZ = True
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['es', 'en', 'abbr']
 CITIES_LIGHT_INCLUDE_COUNTRIES = ['ES', ]
 
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'PASSWORD': 'some-password',
+        'DEFAULT_TIMEOUT': 360,
+    },
+    # 'high': {
+    #     'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+    #     'DEFAULT_TIMEOUT': 500,
+    #     'EXCEPTION_HANDLERS': ['path.to.my.handler'], # If you need custom exception handlers
+    # },
+    'low': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+    }
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/

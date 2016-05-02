@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, patterns, include
 
 from .views import (
     PublishedListView, JobDetailView, JobPublishView,
@@ -43,4 +43,7 @@ urlpatterns = [
     url(r'^published/feed/$', PublishedJobsFeed()),
     url(r'^category/(?P<slug>[-\w]+)/rss/$', CategoryFeed()),
     url(r'^place/(?P<place_id>[0-9]+)/rss/$', PlaceFeed()),
+
+    # Django RQ
+    url(r'^django-rq/', include('django_rq.urls')),
 ]
