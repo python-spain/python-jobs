@@ -10,14 +10,24 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 import os
+from os.path import abspath, basename, dirname, join, normpath
 
 from configurations import Configuration, values
 
 
 class Base(Configuration):
-    # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # Build paths inside the project like this: join(BASE_DIR, ...)
+    BASE_DIR = dirname(dirname(abspath(__file__)))
 
+    ########## PATH CONFIGURATION
+    # Absolute filesystem path to the Django project directory:
+    DJANGO_ROOT = dirname(dirname(abspath(__file__)))
+
+    # Absolute filesystem path to the top-level project folder:
+    SITE_ROOT = dirname(DJANGO_ROOT)
+
+    # Site name:
+    SITE_NAME = basename(DJANGO_ROOT)
 
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -83,7 +93,7 @@ class Base(Configuration):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'NAME': join(BASE_DIR, 'db.sqlite3'),
         }
     }
 
@@ -135,7 +145,22 @@ class Base(Configuration):
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
+    ########## STATIC FILE CONFIGURATION
+    # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+    STATIC_ROOT = normpath(join(SITE_ROOT, 'assets'))
+
     STATIC_URL = '/static/'
+
+    # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
+    STATICFILES_DIRS = (
+        normpath(join(SITE_ROOT, 'static')),
+    )
+
+    # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
+    STATICFILES_FINDERS = (
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    )
 
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
