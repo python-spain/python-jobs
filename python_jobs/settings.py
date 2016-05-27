@@ -172,7 +172,7 @@ class Dev(Base):
 
 class Prod(Base):
     DEBUG = True
-    DATABASES = values.DatabaseURLValue()
+    DATABASES = values.DatabaseURLValue(os.getenv('DATABASE_URL'))
 
     RQ_QUEUES = {
         'default': {
