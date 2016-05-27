@@ -146,7 +146,7 @@ class Dev(Base):
 
 
 class Prod(Base):
-    DEBUG = False
+    DEBUG = True
     DATABASES = values.DatabaseURLValue()
 
     RQ_QUEUES = {
