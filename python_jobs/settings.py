@@ -172,7 +172,9 @@ class Dev(Base):
 
 class Prod(Base):
     DEBUG = True
-    DATABASES = values.DatabaseURLValue(os.getenv('DATABASE_URL'))
+    DATABASES = values.DatabaseURLValue(
+        "postgres://" + os.getenv('DATABASE_URL')
+    )
 
     RQ_QUEUES = {
         'default': {
