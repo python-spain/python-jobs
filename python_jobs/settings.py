@@ -165,9 +165,9 @@ class Dev(Base):
 
 
 class Prod(Base):
-    DEBUG = False
+    DEBUG = True
     DATABASES = values.DatabaseURLValue()
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    ALLOWED_HOSTS = ['*']
 
     RQ_QUEUES = {
         'default': {
