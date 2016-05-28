@@ -165,7 +165,7 @@ class Dev(Base):
 
 
 class Prod(Base):
-    DEBUG = True
+    DEBUG = False
     DATABASES = values.DatabaseURLValue()
     ALLOWED_HOSTS = ['*']
 
