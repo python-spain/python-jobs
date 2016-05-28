@@ -40,7 +40,6 @@ class Base(Configuration):
 
     ALLOWED_HOSTS = []
 
-
     # Application definition
 
     INSTALLED_APPS = [
@@ -90,12 +89,7 @@ class Base(Configuration):
 
     # Database
     # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+    DATABASES = values.DatabaseURLValue("postgres://localhost/pythonjobs")
 
     # Password validation
     # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -171,15 +165,12 @@ class Dev(Base):
 
 
 class Prod(Base):
-    DEBUG = True
-    DATABASES = values.DatabaseURLValue(
-        "postgres://" + os.getenv('DATABASE_URL')
-    )
+    DEBUG = False
+    DATABASES = values.DatabaseURLValue()
 
     RQ_QUEUES = {
         'default': {
             'URL': os.getenv('REDIS_URL', ''),  # If you're on Dokku
             'DEFAULT_TIMEOUT': 500,
-            # 'EXCEPTION_HANDLERS': ['path.to.my.handler'],  # If you need custom exception handlers
         }
     }
