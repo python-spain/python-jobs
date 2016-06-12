@@ -130,14 +130,6 @@ class Base(Configuration):
     CITIES_LIGHT_TRANSLATION_LANGUAGES = ['es', 'en', 'abbr']
     CITIES_LIGHT_INCLUDE_COUNTRIES = ['ES', ]
 
-    RQ_QUEUES = {
-        'default': {
-            # 'URL': values.CacheURLValue('redis://myuser@localhost:6379', environ_name='REDIS_URL'),
-            'URL': os.getenv('REDIS_URL', 'redis://dokku-redis-python-jobs:6379'),  # If you're on Dokku
-            'DEFAULT_TIMEOUT': 500,
-        }
-    }
-
     # RQ_QUEUES = {
     #     'default': {
     #         'HOST': 'localhost',
@@ -211,3 +203,11 @@ class Prod(Base):
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
     EMAIL_USE_SSL = True
+
+    RQ_QUEUES = {
+        'default': {
+            # 'URL': values.CacheURLValue('redis://myuser@localhost:6379', environ_name='REDIS_URL'),
+            'URL': os.getenv('REDIS_URL', 'redis://dokku-redis-python-jobs:6379'),  # If you're on Dokku
+            'DEFAULT_TIMEOUT': 500,
+        }
+    }
