@@ -198,7 +198,7 @@ class Prod(Base):
 
     RQ_QUEUES = {
         'default': {
-            'URL': values.DatabaseURLValue('redis://myuser@localhost:6379', environ_name='REDIS_URL'),
+            'URL': values.CacheURLValue('redis://myuser@localhost:6379', environ_name='REDIS_URL'),
             # os.getenv('REDIS_URL', ''),  # If you're on Dokku
             'DEFAULT_TIMEOUT': 500,
         }
