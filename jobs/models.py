@@ -13,7 +13,7 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
     def __str__(self):
-        return self.name
+        return self.name.encode('utf8')
 
     def get_absolute_url(self):
         return reverse('jobs-by-category', kwargs={'slug': self.slug})
@@ -41,7 +41,12 @@ class Job(models.Model):
     )
 
     def __str__(self):
-        return "%s @ %s" % (self.title, self.place)
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return "%s @ %s" % (
+            self.title.encode('utf8'), self.place.encode('utf8')
+        )
 
     def get_absolute_url(self):
         return reverse('job-detail', kwargs={'slug': self.slug})
