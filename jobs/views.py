@@ -166,7 +166,7 @@ class JobCreateView(CreateView):
         self.job_notification.delay(self.get_object())
         return response
 
-    @job('high')
+    @job('default')
     def job_notification(self, job_post):
         logger.info("Long running func called" + str(job_post))
         super_users = User.objects.filter(is_superuser=True)
