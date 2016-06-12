@@ -1,4 +1,5 @@
 from django.conf.urls import url, patterns, include
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from .views import (
     PublishedListView, JobDetailView, JobPublishView,
@@ -46,4 +47,4 @@ urlpatterns = [
 
     # Django RQ
     url(r'^django-rq/', include('django_rq.urls')),
-]
+] + staticfiles_urlpatterns()

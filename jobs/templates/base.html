@@ -1,4 +1,14 @@
-<html>
-    {% block content %}
+{% extends 'html5boilerplate/base.html' %}
+{% load staticfiles %}
+
+  {% block stylesheet %}
+      <link rel="stylesheet" href="{% static 'html5boilerplate/css/normalize.css' %}" />
+      <link rel="stylesheet" href="{% static 'html5boilerplate/css/main.css' %}" />
+      <link href="{% static 'css/basic.css' %}"
+            rel="stylesheet" media="screen">
+  {% endblock %}
+
+    {% block body_content %}
+        {% block content %}
+        {% endblock %}
     {% endblock %}
-</html>

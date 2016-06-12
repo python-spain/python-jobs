@@ -49,14 +49,16 @@ class Base(Configuration):
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
+        'teracy.html5boilerplate',
         'cities_light',
         'jobs',
-        'crispy_forms',
+        # 'crispy_forms',
         'django_rq'
     ]
 
     MIDDLEWARE_CLASSES = [
         'django.middleware.security.SecurityMiddleware',
+        'whitenoise.middleware.WhiteNoiseMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
@@ -141,13 +143,13 @@ class Base(Configuration):
 
     ########## STATIC FILE CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-    STATIC_ROOT = normpath(join(SITE_ROOT, 'assets'))
+    STATIC_ROOT = normpath(join(BASE_DIR, 'staticfiles'))
 
     STATIC_URL = '/static/'
 
     # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
     STATICFILES_DIRS = (
-        normpath(join(SITE_ROOT, 'static')),
+        normpath(join(BASE_DIR, 'static')),
     )
 
     # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
@@ -158,16 +160,40 @@ class Base(Configuration):
 
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
+    TEMPLATE_CONTEXT_PROCESSORS = (
+        'teracy.html5boilerplate.context_processors.page',
+    )
+
+    SITE_AUTHOR = 'Fede'
+    SITE_COPYRIGHT = 'Fede, Inc.'
+    SITE_GA_ID = 'U-42868657-2'
+
 
 class Dev(Base):
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
+    TEMPLATE_CONTEXT_PROCESSORS = (
+        'teracy.html5boilerplate.context_processors.page',
+        'django.core.context_processors.debug',
+    )
 
 
 class Prod(Base):
+    import raven
     DEBUG = False
     DATABASES = values.DatabaseURLValue()
     ALLOWED_HOSTS = ['*']
+
+    INSTALLED_APPS = Base.INSTALLED_APPS + [
+        'raven.contrib.django.raven_compat',
+    ]
+
+    RAVEN_CONFIG = {
+        'dsn': 'https://fd792db60bdd41f09b97e7cd16ae3688:35c75e21094944b3938ff8cd0ef9d653@app.getsentry.com/82255',
+        # If you are using git, you can also automatically configure the
+        # release based on the git info.
+        'release': raven.fetch_git_sha(os.path.dirname(__file__)),
+    }
 
     RQ_QUEUES = {
         'default': {

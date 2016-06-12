@@ -24,7 +24,7 @@ class Job(models.Model):
     company = models.CharField(max_length=255)
     created_at = models.DateField(auto_now_add=True, editable=False)
     published_at = models.DateField(null=True, blank=True, default=None)
-    last_viewed_at = models.DateField(editable=False)
+    last_viewed_at = models.DateField(editable=False, null=True, blank=True)
     times_viewed = models.IntegerField(default=0)
     slug = models.SlugField(
         max_length=255, unique=True, blank=True, default=''

@@ -1,3 +1,4 @@
 -r base.txt
 gunicorn
 psycopg2
+raven
