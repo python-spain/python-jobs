@@ -192,7 +192,7 @@ class Prod(Base):
         'dsn': 'https://fd792db60bdd41f09b97e7cd16ae3688:35c75e21094944b3938ff8cd0ef9d653@app.getsentry.com/82255',
         # If you are using git, you can also automatically configure the
         # release based on the git info.
-        'release': raven.fetch_git_sha(os.path.dirname(__file__)),
+        'release': 'rolling',
     }
 
     RQ_QUEUES = {
