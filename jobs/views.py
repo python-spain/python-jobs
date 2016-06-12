@@ -163,7 +163,7 @@ class JobCreateView(CreateView):
 
     def post(self, request, *args, **kwargs):
         response = super(JobCreateView, self).post(request, *args, **kwargs)
-        self.job_notification.delay(self.get_object())
+        self.job_notification.delay(self.object)
         return response
 
     @job('default')
