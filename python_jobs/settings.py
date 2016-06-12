@@ -132,9 +132,12 @@ class Base(Configuration):
 
     RQ_QUEUES = {
         'default': {
-            'URL': os.getenv('REDIS_URL', ''),  # If you're on Dokku
-            'DEFAULT_TIMEOUT': 500,
-        }
+            'HOST': 'localhost',
+            'PORT': 6379,
+            'DB': 0,
+            'PASSWORD': 'some-password',
+            'DEFAULT_TIMEOUT': 360,
+        },
     }
 
     # Static files (CSS, JavaScript, Images)
@@ -191,6 +194,14 @@ class Prod(Base):
         # If you are using git, you can also automatically configure the
         # release based on the git info.
         'release': 'rolling',
+    }
+
+    RQ_QUEUES = {
+        'default': {
+            'URL': values.DatabaseURLValue('redis://myuser@localhost:6379', environ_name='REDIS_URL'),
+            # os.getenv('REDIS_URL', ''),  # If you're on Dokku
+            'DEFAULT_TIMEOUT': 500,
+        }
     }
 
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
