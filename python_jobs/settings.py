@@ -202,3 +202,9 @@ class Prod(Base):
             'DEFAULT_TIMEOUT': 500,
         }
     }
+
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'mail.google.com'
+    EMAIL_HOST_USER = 'jobspythonmadrid@gmail.com'
+    EMAIL_HOST_PASSWORD = values.Value('password')
+    EMAIL_USE_TLS = True
