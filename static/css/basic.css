@@ -1,0 +1,44 @@
+body {
+  padding-left: 11em;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 30px;
+  color: purple;
+  background-color: #fabada;
+}
+
+form > ul > li {
+  list-style-type:none; 
+  padding: 17px 0 0 17px;
+    float: left;
+    clear: left;
+}
+
+.button--big {
+    float: left;
+    clear: left;
+}
+
+.button--big,
+form > ul > li > input,
+form > ul > li > select,
+form > ul > li > textarea {
+  font-size: 30px;
+}
+
+
+form > ul > li > label{
+    display: inline-block;
+    width: 250px;
+    text-align: right;
+    clear: left;
+    float: left;
+    padding-right: 6px;
+}
+
+form > ul > li > input,
+form > ul > li > select,
+form > ul > li > textarea
+{
+  display: inline-block;
+  float: left;
+}
