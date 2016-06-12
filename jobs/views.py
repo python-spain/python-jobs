@@ -1,3 +1,6 @@
+import logging
+
+from django.contrib.auth import User
 from django.contrib.syndication.views import Feed
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.urlresolvers import reverse_lazy
@@ -9,9 +12,13 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from datetime import date
 
 from cities_light.models import City
+from mailviews.messages import TemplatedEmailMessageView
+from django_rq import job
 
 from .forms import JobForm
 from .models import Job, Category
+
+logger = logging.getLogger(__name__)
 
 
 class JobDetailView(DetailView):
@@ -154,6 +161,21 @@ class JobCreateView(CreateView):
     form_class = JobForm
     template_name = 'job_form.html'
 
+    def post(self, request, *args, **kwargs):
+        response = super(JobCreateView, self).post(request, *args, **kwargs)
+        job = Job.objects.get(**kwargs)
+        self.job_notification.delay(job)
+
+        return response
+
+    @job('high')
+    def job_notification(self, job_post):
+        logger.info("Long running func called")
+        super_users = User.objects.filter(is_superuser=True)
+        message = JobNotificationMessageView().send(extra_context={
+            'job_post': job_post,
+        }, to=list(user.email for user in super_users))
+
 
 class JobUpdateView(UpdateView):
     model = Job
@@ -164,3 +186,9 @@ class JobUpdateView(UpdateView):
 class JobDeleteView(DeleteView):
     model = Job
     success_url = reverse_lazy('jobs-published')
+
+
+# Subclass the `TemplatedEmailMessageView`, adding the templates you want to render.
+class JobNotificationMessageView(TemplatedEmailMessageView):
+    subject_template_name = 'emails/job_notification/subject.txt'
+    body_template_name = 'emails/job_notification/body.txt'
