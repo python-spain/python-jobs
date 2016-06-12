@@ -45,7 +45,7 @@ class Job(models.Model):
 
     def __unicode__(self):
         return "%s @ %s" % (
-            self.title.encode('utf8'), self.place.encode('utf8')
+            self.title.encode('utf8'), self.place.display_name.encode('utf8')
         )
 
     def get_absolute_url(self):
