@@ -7,3 +7,5 @@ django-configurations
 whitenoise
 teracy-django-html5-boilerplate
 raven
+django-mailviews
+psycopg2

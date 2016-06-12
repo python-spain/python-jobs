@@ -1,6 +1,6 @@
 import logging
 
-from django.contrib.auth import User
+from django.contrib.auth.models import User
 from django.contrib.syndication.views import Feed
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.urlresolvers import reverse_lazy
@@ -163,14 +163,12 @@ class JobCreateView(CreateView):
 
     def post(self, request, *args, **kwargs):
         response = super(JobCreateView, self).post(request, *args, **kwargs)
-        job = Job.objects.get(**kwargs)
-        self.job_notification.delay(job)
-
+        self.job_notification.delay(self.get_object())
         return response
 
     @job('high')
     def job_notification(self, job_post):
-        logger.info("Long running func called")
+        logger.info("Long running func called" + str(job_post))
         super_users = User.objects.filter(is_superuser=True)
         message = JobNotificationMessageView().send(extra_context={
             'job_post': job_post,
