@@ -163,16 +163,8 @@ class JobCreateView(CreateView):
 
     def post(self, request, *args, **kwargs):
         response = super(JobCreateView, self).post(request, *args, **kwargs)
-        self.job_notification.delay(self.object)
+        job_notification.delay(self.object)
         return response
-
-    @job('default')
-    def job_notification(self, job_post):
-        logger.info("Long running func called" + str(job_post))
-        super_users = User.objects.filter(is_superuser=True)
-        message = JobNotificationMessageView().send(extra_context={
-            'job_post': job_post,
-        }, to=list(user.email for user in super_users))
 
 
 class JobUpdateView(UpdateView):
@@ -190,3 +182,12 @@ class JobDeleteView(DeleteView):
 class JobNotificationMessageView(TemplatedEmailMessageView):
     subject_template_name = 'emails/job_notification/subject.txt'
     body_template_name = 'emails/job_notification/body.txt'
+
+
+@job('default')
+def job_notification(job_post):
+    logger.info("Long running func called" + str(job_post))
+    super_users = User.objects.filter(is_superuser=True)
+    message = JobNotificationMessageView().send(extra_context={
+        'job_post': job_post,
+    }, to=list(user.email for user in super_users))
