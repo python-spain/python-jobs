@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 import os
+import raven
+
 from os.path import abspath, basename, dirname, join, normpath
 
 from configurations import Configuration, values
@@ -179,7 +181,6 @@ class Dev(Base):
 
 
 class Prod(Base):
-    import raven
     DEBUG = False
     DATABASES = values.DatabaseURLValue()
     ALLOWED_HOSTS = ['*']
